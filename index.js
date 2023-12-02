@@ -36,10 +36,10 @@ app.post('/delete-my-project/:id', deleteBlog)
 app.get('/add-my-project', addBlogView)
 app.post('/add-my-project', addBlog)
 
-app.get('/update-blog/:id', updateBlogView)
-app.post('/update-blog', updateBlog)
+app.get('/update-my-project/:id', updateBlogView)
+app.post('/update-my-project', updateBlog)
 
-app.get('/blog-detail/:id', blogDetail)
+app.get('/my-project-detail/:id', blogDetail)
 app.get('/testimonial', testimonial)
 
 app.get('/register', registerView)
@@ -62,7 +62,7 @@ function contact(req, res) {
 }
 
 async function blog(req, res) {
-    // const query = 'SELECT * FROM blogs'
+    // const query = 'SELECT * FROM my-project'
     // const obj = await sequelize.query(query, { type: QueryTypes.SELECT })
     const data = await blogModel.findAll()
     // console.log("data", data)
@@ -91,7 +91,7 @@ async function addBlog(req, res) {
     // const dataBlog = { title, content }
 
     // data.unshift(dataBlog)
-    const query = `INSERT INTO blogs(title, content, image, author) VALUES ('${title}', '${content}','${image}','${author}')`
+    const query = `INSERT INTO my-project(title, content, image, author) VALUES ('${title}', '${content}','${image}','${author}')`
     const obj = await sequelize.query(query, { type: QueryTypes.INSERT })
 
     console.log("data berhasil di insert", obj)
@@ -148,7 +148,7 @@ async function deleteBlog(req, res) {
 async function blogDetail(req, res) {
     const { id } = req.params // destructuring
 
-    // const query = `SELECT * FROM blogs WHERE id=${id}`
+    // const query = `SELECT * FROM my-project WHERE id=${id}`
     // const obj = await sequelize.query(query, { type: QueryTypes.SELECT })
     const data = await blogModel.findOne({
         where: { id }
