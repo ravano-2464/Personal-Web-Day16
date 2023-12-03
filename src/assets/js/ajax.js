@@ -21,7 +21,7 @@ const janji = new Promise((resolve, reject) => {
 
 function html(item) {
     return `<div class="testimonial">
-    <img src="${item.image}" class="profile-testimonial" />
+    <img src="${item.image}" class="profiles-testimonial" />
     <p class="quote">"${item.content}"</p>
     <p class="author">- ${item.author}</p>
     <p class="author">${item.rating} <i class="fa-solid fa-star"></i></p>
