@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/assets/css/My-Project.css" />
 
     <style>
-         .Blog-list {
+         .my-project-list {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -92,7 +92,7 @@
                     <div class="col-md-6">
                         <div class="card-body">
                             <h5 class="card-title">
-                                <a href="/blog-detail/{{this.id}}" target="_blank">{{this.title}}</a>
+                                <a href="/my-project-detail/{{this.id}}" target="_blank">{{this.title}}</a>
                             </h5>
                             <p>
                                 {{this.createdAt}} | {{this.author}}
@@ -103,8 +103,8 @@
                         </div>
                     </div>
                     <div class="col-md-2 d-flex" style="height: fit-content;">
-                        <a href="/update-blog/{{this.id}}" class="btn btn-secondary">Edit Post My Project</a>
-                        <form method="post" action="/delete-blog/{{this.id}}">
+                        <a href="/update-my-project/{{this.id}}" class="btn btn-secondary">Edit Post My Project</a>
+                        <form method="post" action="/delete-my-project/{{this.id}}">
                             <button class="btn btn-primary">Delete Post My Project</button>
                         </form>
                     </div>
@@ -114,8 +114,8 @@
         </div>
     </div>
 
-    <div class="Blog">
-        <div class="Blog-form">
+    <div class="my-project">
+        <div class="my-project-form">
             <div class="form-container">
                 <form onsubmit="submitData(event)">
                     <h1>ADD MY PROJECT</h1>
@@ -160,7 +160,7 @@
                     <br>
                     <div>
                         <label for="inputImage">Choose Image</label>
-                        <div class="input-Blog-image-group">
+                        <div class="input-my-project-image-group">
                             <label for="inputImage" class="custom-file-upload">
                                 <p class="text-label">Attach File</p>
                                 <img src="/assets/icon/file.png" alt="file" style="width: 50px; height: 50px;" />
@@ -179,7 +179,7 @@
 
         <div>
             <h2 style="text-align: center;">My Projects</h2>
-            <div id="contents" class="Blog-list">
+            <div id="contents" class="my-project-list">
                 <div class="card-icons">
                     <i class="fa-brands fa-google-play fa-xl"></i>
                     <i class="fa-brands fa-android fa-xl"></i>

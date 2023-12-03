@@ -8,13 +8,15 @@ const sequelize = new Sequelize(config.development)
 const bcrypt = require('bcrypt')
 const session = require('express-session')
 const flash = require('express-flash')
-const blogModel = require('./src/models').blog
+const myprojectModel = require('./src/models').myproject
+const upload = require('./src/middlewares/uploadFile')
 
 // app.set = buat setting varible global, configuratoin, dll
 app.set("view engine", "hbs")
 app.set("views", path.join(__dirname, 'src/views'))
 
 app.use("/assets", express.static(path.join(__dirname, 'src/assets')))
+app.use("/uploads", express.static(path.join(__dirname, 'src/uploads')))
 app.use(express.urlencoded({ extended: false })) // body parser, extended : false -> querystring, extended : true -> menggunakan querystring third party -> qs
 app.use(flash())
 app.use(session({
@@ -30,16 +32,16 @@ app.use(session({
 
 app.get('/', home)
 app.get('/contact', contact)
-app.get('/my-project', blog)
-app.post('/delete-my-project/:id', deleteBlog)
+app.get('/my-project', myproject)
+app.post('/delete-my-project/:id', deletemyproject)
 
-app.get('/add-my-project', addBlogView)
-app.post('/add-my-project', addBlog)
+app.get('/add-my-project', addmyprojectView)
+app.post('/add-my-project', upload.single("image"), addmyproject)
 
-app.get('/update-my-project/:id', updateBlogView)
-app.post('/update-my-project', updateBlog)
+app.get('/update-my-project/:id', updatemyprojectView)
+app.post('/update-my-project', upload.single("image"), updatemyproject)
 
-app.get('/my-project-detail/:id', blogDetail)
+app.get('/my-project-detail/:id', myprojectDetail)
 app.get('/testimonial', testimonial)
 
 app.get('/register', registerView)
@@ -61,37 +63,39 @@ function contact(req, res) {
     res.render('contact')
 }
 
-async function blog(req, res) {
-    // const query = 'SELECT * FROM my-project'
-    // const obj = await sequelize.query(query, { type: QueryTypes.SELECT })
-    const data = await blogModel.findAll()
+async function myproject(req, res) {
+    const query = `SELECT my-project.id, my-project.title, my-project.content, my-project.image, 
+    users.name AS author, my-project."createdAt", my-project."updatedAt" FROM my-project LEFT JOIN users ON
+    my-project."authorId" = users.id`
+    const obj = await sequelize.query(query, { type: QueryTypes.SELECT })
+    // const data = await my-projectModel.findAll()
     // console.log("data", data)
-    // console.log("data blog", data)
+    console.log("data my-project", obj)
 
     const isLogin = req.session.isLogin
     const user = req.session.user
 
-    // res.render('blog', { data })
-    res.render('my-project', { data, isLogin, user })
+    // res.render('my-project', { data })
+    res.render('my-project', { data: obj, isLogin, user })
 }
 
-function addBlogView(req, res) {
+function addmyprojectView(req, res) {
     res.render('add-my-project')
 }
 
-async function addBlog(req, res) {
+async function addmyproject(req, res) {
     const { title, content } = req.body
 
-    const image = "Ravano.jpeg"
-    const author = "Ravano Akbar Widodo"
+    const image = req.file.filename
+    const authorId = req.session.user.id
 
     // console.log("Title :", title)
     // console.log("Content :", content)
 
-    // const dataBlog = { title, content }
+    // const datamy-project = { title, content }
 
-    // data.unshift(dataBlog)
-    const query = `INSERT INTO my-project(title, content, image, author) VALUES ('${title}', '${content}','${image}','${author}')`
+    // data.unshift(datamy-project)
+    const query = `INSERT INTO my-project(title, content, image, "authorId") VALUES ('${title}', '${content}','${image}','${authorId}')`
     const obj = await sequelize.query(query, { type: QueryTypes.INSERT })
 
     console.log("data berhasil di insert", obj)
@@ -99,7 +103,7 @@ async function addBlog(req, res) {
     res.redirect('/my-project')
 }
 
-async function updateBlogView(req, res) {
+async function updatemyprojectView(req, res) {
     const { id } = req.params
 
     // const dataFilter = data[parseInt(id)]
@@ -108,13 +112,26 @@ async function updateBlogView(req, res) {
     const query = `SELECT * FROM my-project WHERE id=${id}`
     const obj = await sequelize.query(query, { type: QueryTypes.SELECT })
 
-    console.log("update my project view", obj)
+    console.log("update my-project view", obj)
 
     res.render('update-my-project', { data: obj[0] })
 }
 
-async function updateBlog(req, res) {
+async function updatemyproject(req, res) {
     const { title, content, id } = req.body
+
+    let image = ""
+    if (req.file) {
+        image = req.file.filename
+    }
+
+    if (!image) {
+        const query = `SELECT my-project.id, my-project.title, my-project.content, my-project.image, 
+        users.name AS author, my-project."createdAt", my-project."updatedAt" FROM my-project LEFT JOIN users ON
+        my-project."authorId" = users.id WHERE my-project.id=${id}`
+        const obj = await sequelize.query(query, { type: QueryTypes.SELECT })
+        image = obj[0].image
+    }
 
     // console.log("Id :", id)
     // console.log("Title :", title)
@@ -124,16 +141,16 @@ async function updateBlog(req, res) {
     //     title,
     //     content,
     // }
-    const query = `UPDATE my-project SET title='${title}',content='${content}' WHERE id=${id}`
+    const query = `UPDATE my-project SET title='${title}',content='${content}', image='${image}' WHERE id=${id}`
     const obj = await sequelize.query(query, { type: QueryTypes.UPDATE })
 
-    console.log("blog berhasil di update!", obj)
+    console.log("my-project berhasil di update!", obj)
 
-    res.redirect('/blog')
+    res.redirect('/my-project')
 }
 
 
-async function deleteBlog(req, res) {
+async function deletemyproject(req, res) {
     const { id } = req.params
 
     // data.splice(id, 1)
@@ -145,18 +162,20 @@ async function deleteBlog(req, res) {
     res.redirect('/my-project')
 }
 
-async function blogDetail(req, res) {
+async function myprojectDetail(req, res) {
     const { id } = req.params // destructuring
 
-    // const query = `SELECT * FROM my-project WHERE id=${id}`
-    // const obj = await sequelize.query(query, { type: QueryTypes.SELECT })
-    const data = await blogModel.findOne({
-        where: { id }
-    })
+    const query = `SELECT my-project.id, my-project.title, my-project.content, my-project.image, 
+    users.name AS author, my-project."createdAt", my-project."updatedAt" FROM my-project LEFT JOIN users ON
+    my-project."authorId" = users.id WHERE my-project.id=${id}`
+    const obj = await sequelize.query(query, { type: QueryTypes.SELECT })
+    // const data = await my-projectModel.findOne({
+    //     where: { id }
+    // })
 
-    console.log("myprojectDetail", data)
+    console.log("myprojectDetail", obj)
 
-    res.render('my-project-detail', { data })
+    res.render('my-project-detail', { data: obj[0] })
 }
 
 function testimonial(req, res) {
@@ -195,6 +214,7 @@ async function login(req, res) {
         req.flash('success', 'Login success!')
         req.session.isLogin = true
         req.session.user = {
+            id: obj[0].id,
             name: obj[0].name,
             email: obj[0].email
         }

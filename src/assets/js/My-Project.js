@@ -30,7 +30,7 @@ function getDistanceTime(time) {
     }
 }
 
-let dataBlog = [];
+let datamy-project = [];
 
 function submitData(event) {
     event.preventDefault();
@@ -54,7 +54,7 @@ function submitData(event) {
 
             console.log(projectNameValue, startDateValue, endDateValue, descriptionValue, technologiesValue, imageUrl);
 
-            const blog = {
+            const my-project = {
                 title: projectNameValue, 
                 content: descriptionValue,
                 technologies: technologiesValue,
@@ -67,41 +67,41 @@ function submitData(event) {
                 typescript: false,
             }
 
-            dataBlog.push(blog);
-            console.log("dataBlog", dataBlog)
-            renderBlog();
+            datamy-project.push(my-project);
+            console.log("datamy-project", datamy-project)
+            rendermy-project();
         }
     }
 }
 
-function renderBlog() {
+function rendermy-project() {
     const contentsElement = document.getElementById("contents");
     contentsElement.innerHTML = '';
 
-    for (let index = 0; index < dataBlog.length; index++) {
+    for (let index = 0; index < datamy-project.length; index++) {
         contentsElement.innerHTML += `
-        <div class="blog-list-item">
-            <div class="blog-image">
-                <img src="${dataBlog[index].image}" alt="" />
+        <div class="my-project-list-item">
+            <div class="my-project-image">
+                <img src="${datamy-project[index].image}" alt="" />
             </div>
-            <div class="blog-content">
+            <div class="my-project-content">
                 <div class="btn-group">
                     <button class="btn-edit">Edit Post</button>
                     <button class="btn-post">Delete Post</button>
                 </div>
                 <h1>
-                    <a href="My-Project-detail.html" target="_blank">${dataBlog[index].title}</a>
+                    <a href="My-Project-detail.html" target="_blank">${datamy-project[index].title}</a>
                 </h1>
-                <div class="detail-blog-content">
-                    ${dataBlog[index].postAt} | ${dataBlog[index].author}
+                <div class="detail-my-project-content">
+                    ${datamy-project[index].postAt} | ${datamy-project[index].author}
                 </div>
                 <p>
-                   ${dataBlog[index].content}
+                   ${datamy-project[index].content}
                 </p>
                 <div class="technologies">
                     <label>Technologies:</label>
                     <ul>
-                        ${dataBlog[index].technologies.map((tech) => `<li>${tech}</li>`).join('')}
+                        ${datamy-project[index].technologies.map((tech) => `<li>${tech}</li>`).join('')}
                     </ul>
                 </div>
             </div>
@@ -110,5 +110,5 @@ function renderBlog() {
 }
 
 setInterval(function() {
-    renderBlog()
+    rendermy-project()
 }, 1000)

@@ -42,31 +42,31 @@
     color: orangered;
 }
 
-.Blog-form {
+.my-project-form {
     padding: 50px 0;
     display: flex;
     justify-content: center;
 }
 
-.Blog-form .form-container {
+.my-project-form .form-container {
     width: 80%;
     max-width: 600px;
 }
 
-.Blog-form .form-container h1 {
+.my-project-form .form-container h1 {
     text-align: center;
     margin-bottom: 40px;
 }
 
-.Blog-form form label {
+.my-project-form form label {
     font-size: 18px;
     font-weight: 400;
 }
 
-.Blog-form form input,
-.Blog-form form textarea,
-.Blog-form form select,
-.Blog-form form .input-Blog-image-group {
+.my-project-form form input,
+.my-project-form form textarea,
+.my-project-form form select,
+.my-project-form form .input-my-project-image-group {
     width: 100%;
     font-size: 16px;
     font-weight: 400;
@@ -78,26 +78,26 @@
     border-radius: 8px;
 }
 
-.Blog-form form textarea {
+.my-project-form form textarea {
     height: 150px;
 }
 
-.Blog-form form .input-Blog-image-group label p {
+.my-project-form form .input-my-project-image-group label p {
     font-size: 14px;
 }
 
-.Blog-form form .input-Blog-image-group label {
+.my-project-form form .input-my-project-image-group label {
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.Blog-form form .button-group {
+.my-project-form form .button-group {
     text-align: right;
 }
 
-.Blog-form form button {
+.my-project-form form button {
     margin-top: 20px;
     padding: 8px 20px;
     font-size: 16px;
@@ -109,19 +109,19 @@
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.Blog-form form button:hover {
+.my-project-form form button:hover {
     background-color: #f7f7f7;
     color: #333;
 }
 
-.Blog hr {
+.my-project hr {
     border: 1px solid #ddd;
     width: 80%;
     margin-right: auto;
     margin-left: auto;
 }
 
-.Blog .Blog-list {
+.my-project .my-project-list {
     margin-top: 40px;
     margin-bottom: 40px;
     display: flex;
@@ -129,7 +129,7 @@
     flex-direction: column;
 }
 
-.Blog .Blog-list .Blog-list-item {
+.my-project .my-project-list .my-project-list-item {
     width: 80%;
     max-width: 800px;
     padding: 15px;
@@ -140,29 +140,29 @@
     flex-wrap: wrap;
 }
 
-.Blog .Blog-list .Blog-list-item .Blog-image {
+.my-project .my-project-list .my-project-list-item .my-project-image {
     flex: 1;
 }
 
-.Blog .Blog-list .Blog-list-item .Blog-image img {
+.my-project .my-project-list .my-project-list-item .my-project-image img {
     width: 100%;
     height: auto;
     border-radius: 8px;
     object-fit: cover;
 }
 
-.Blog .Blog-list .Blog-list-item .Blog-content {
+.my-project .my-project-list .my-project-list-item .my-project-content {
     padding-left: 20px;
     flex: 2;
 }
 
-.Blog .Blog-list .btn-group {
+.my-project .my-project-list .btn-group {
     text-align: right;
     margin-bottom: 20px;
 }
 
-.Blog .Blog-list .btn-group .btn-edit,
-.Blog .Blog-list .btn-group .btn-post {
+.my-project .my-project-list .btn-group .btn-edit,
+.my-project .my-project-list .btn-group .btn-post {
     padding: 5px 10px;
     border: 0;
     border-radius: 4px;
@@ -170,33 +170,33 @@
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.Blog .Blog-list .btn-group .btn-edit {
+.my-project .my-project-list .btn-group .btn-edit {
     background: #f7f7f7;
 }
 
-.Blog .Blog-list .btn-group .btn-post {
+.my-project .my-project-list .btn-group .btn-post {
     background: #333;
     color: #fff;
 }
 
-.Blog .Blog-list .btn-group .btn-edit:hover,
-.Blog .Blog-list .btn-group .btn-post:hover {
+.my-project .my-project-list .btn-group .btn-edit:hover,
+.my-project .my-project-list .btn-group .btn-post:hover {
     background-color: #333;
     color: #fff;
 }
 
-.Blog .Blog-list h1 a {
+.my-project .my-project-list h1 a {
     text-decoration: none;
     color: #000;
 }
 
-.Blog .Blog-list .detail-Blog-content {
+.my-project .my-project-list .detail-my-project-content {
     font-weight: 300;
     font-size: 14px;
     line-height: 20px;
 }
 
-.Blog .Blog-list .Blog-list-item p {
+.my-project .my-project-list .my-project-list-item p {
     margin-top: 20px;
     font-weight: normal;
     font-size: 16px;
@@ -204,24 +204,24 @@
     text-align: justify;
 }
 
-.Blog-detail {
+.my-project-detail {
     display: flex;
     justify-content: center;
 }
 
-.Blog-detail-container {
+.my-project-detail-container {
     width: 80%;
     max-width: 800px;
     margin: 40px 0;
 }
 
-.Blog-detail-container img {
+.my-project-detail-container img {
     width: 100%;
     height: auto;
     border-radius: 8px;
 }
 
-.Blog-detail-container h1 {
+.my-project-detail-container h1 {
     font-style: normal;
     font-weight: 800;
     font-size: 36px;
@@ -229,14 +229,14 @@
     margin-bottom: 15px;
 }
 
-.Blog-detail-container .author {
+.my-project-detail-container .author {
     font-weight: 100;
     font-size: 18px;
     line-height: 120%;
     margin-bottom: 20px;
 }
 
-.Blog-detail-container p {
+.my-project-detail-container p {
     margin-top: 40px;
     font-style: normal;
     font-weight: normal;
