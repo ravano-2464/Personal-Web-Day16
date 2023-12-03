@@ -52,7 +52,7 @@ app.post('/login', login)
 async function home(req, res) {
     const id = 4
 
-    const query = `SELECT * FROM profiless WHERE id=${id}`
+    const query = `SELECT * FROM profiles WHERE id=${id}`
     const obj = await sequelize.query(query, { type: QueryTypes.SELECT })
     console.log("ini  data profiles", obj)
 
