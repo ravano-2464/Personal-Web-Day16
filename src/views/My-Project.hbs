@@ -79,9 +79,7 @@
     </nav>
 
  <div class="container d-flex flex-column">
-        <div class="w-100 d-flex justify-content-end mb-3">
-            <a href="/add-My-Project" class="btn btn-primary">Add New My Project</a>
-        </div>
+       
         <div id="contents">
             {{#each data}}
             <div class="card mb-3 w-100">
@@ -95,7 +93,7 @@
                                 <a href="/my-project-detail/{{this.id}}" target="_blank">{{this.title}}</a>
                             </h5>
                             <p>
-                                {{this.createdAt}} | {{this.author}}
+                                {{this.created_at}} | {{this.author}}
                             </p>
                             <p class="card-text">{{this.content}}</p>
                             <p class="card-text"><small class="text-body-secondary">1 seconds ago

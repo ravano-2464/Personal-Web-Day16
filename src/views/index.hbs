@@ -43,6 +43,13 @@
             <div style="display: flex; width: 100%; justify-content: flex-end;">
                 <a href="/contact" class="btn-contact">Contact Me</a>
             </div>
+    {{#if messages.success}}
+    <div class="alert alert-success" role="alert">
+    <div class="container">
+            {{messages.success}}
+     </div>
+    </div>
+    {{/if}}
         </div>
     </nav>
     <div style="
