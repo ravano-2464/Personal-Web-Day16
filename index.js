@@ -48,7 +48,7 @@ app.get("/contact", contact);
 app.get("/my-project", MyProject);
 app.post("/my-project", handleMyProject);
 
-app.get("/testimonial", testimonial);
+app.get("/my-testimonials", myTestimonials);
 app.get("/detail-project/:id", detailProject);
 app.get("/register", register);
 app.post("/register", handleRegister);
@@ -160,9 +160,9 @@ async function MyProject(req, res) {
   });
 }
 
-function testimonial(req, res) {
+function myTestimonials(req, res) {
   const titlePage = "My Testimonials";
-  res.render("testimonial", {
+  res.render("my-testimonials", {
     titlePage,
     handleLogin: req.session.handleLogin,
     user: req.session.user,
