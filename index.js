@@ -48,7 +48,7 @@ app.get("/contact", contact);
 app.get("/my-project", MyProject);
 app.post("/my-project", handleMyProject);
 
-app.get("/my-testimonials", myTestimonials);
+app.get("/testimonial", myTestimonials);
 app.get("/detail-project/:id", detailProject);
 app.get("/register", register);
 app.post("/register", handleRegister);
