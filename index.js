@@ -91,7 +91,7 @@ async function handleLogin(req, res) {
   try {
     const { email, password } = req.body;
     const checkEmail = await SequelizePool.query(
-      `SELECT * FROM users WHERE email = '${email}'`,
+      `SELECT * FROM public.user WHERE email = '${email}'`,
       { type: QueryTypes.SELECT }
     );
 
@@ -106,7 +106,7 @@ async function handleLogin(req, res) {
       } else {
         req.session.handleLogin = true;
         req.session.user = checkEmail[0].name;
-        req.session.idUsers = checkEmail[0].id;
+        req.session.idpublic.user = checkEmail[0].id;
         req.flash("success", "Wellcome!");
         return res.redirect("/");
       }
@@ -121,16 +121,16 @@ async function home(req, res) {
     let projectNew;
 
     if (req.session.handleLogin) {
-      const author = req.session.idUsers;
+      const author = req.session.idpublic.user;
       projectNew = await SequelizePool.query(
-        `SELECT projects.id, projects.project_name, projects.description, projects.distance, projects.image, projects.author,
-         projects."createdAt", projects."updatedAt", projects.technologies, users.name FROM projects INNER JOIN users ON projects.author = users.id where author = ${author} ORDER BY projects.id DESC`,
+        `SELECT public.myproject.id, myproject.project_name, public.myproject.description, public.myproject.duration, public.myproject.image, public.myproject.author,
+        public.myproject."createdAt", public.myproject."updatedAt", public.myproject.technologies, public.user.name FROM public.myproject INNER JOIN public.user ON public.authors = user.id where author = ${author} ORDER BY public.myproject.id DESC`,
         { type: QueryTypes.SELECT }
       );
     } else {
       projectNew = await SequelizePool.query(
-        `SELECT projects.id, projects.project_name, projects.description, projects.distance, projects.image, projects.author,
-         projects."createdAt", projects."updatedAt", projects.technologies, users.name FROM projects INNER JOIN users ON projects.author = users.id ORDER BY projects.id DESC`,
+        `SELECT public.myproject.id, public.myproject.project_name, public.myproject.description, public.myproject.duration, public.myproject.image, public.myproject.author,
+         public.myproject."createdAt", public.myproject."updatedAt", public.myproject.technologies, public.user.name FROM public.myproject INNER JOIN public.user ON public.myproject.author = public.user.id ORDER BY public.myproject.id DESC`,
         { type: QueryTypes.SELECT }
       );
     }
@@ -185,7 +185,7 @@ async function detailProject(req, res) {
   const titlePage = "Detail Project";
   const { id } = req.params;
   const dataDetail = await SequelizePool.query(
-    "SELECT * FROM projects where id = " + id
+    "SELECT * FROM public.myproject where id = " + id
   );
 
   res.render("detail-project", {
@@ -200,7 +200,7 @@ async function handleMyProject(req, res) {
   try {
     const { projectName, startDate, endDate, description, techIcon } = req.body;
 
-    const author = req.session.idUsers;
+    const author = req.session.idpublic.user;
 
     const image = req.file.filename;
 
@@ -211,19 +211,19 @@ async function handleMyProject(req, res) {
     const months = Math.floor(time / (1000 * 60 * 60 * 24 * 30));
     const years = Math.floor(time / (1000 * 60 * 60 * 24) / 365);
 
-    let distance = [];
+    let duration = [];
 
     if (days < 24) {
-      distance += days + " Days";
+      duration += days + " Days";
     } else if (months < 12) {
-      distance += months + " Month";
+      duration += months + " Month";
     } else if (years < 365) {
-      distance += years + " Years";
+      duration += years + " Years";
     }
 
     await SequelizePool.query(
-      `INSERT INTO projects(project_name, start_date, end_date, description, distance, image, author, "createdAt", "updatedAt", technologies) 
-      VALUES ('${projectName}','${startDate}','${endDate}','${description}','${distance}','${image}',${author}, NOW(), NOW(), '{${techIcon}}')`
+      `INSERT INTO public.myproject(project_name, start_date, end_date, description, duration, image, author, "createdAt", "updatedAt", technologies) 
+      VALUES ('${projectName}','${startDate}','${endDate}','${description}','${duration}','${image}',${author}, NOW(), NOW(), '{${techIcon}}')`
     );
 
     res.redirect("/");
@@ -235,7 +235,7 @@ async function handleMyProject(req, res) {
 async function editMyProject(req, res) {
   const { id } = req.params;
   const data = await SequelizePool.query(
-    "SELECT * FROM projects where id = " + id
+    "SELECT * FROM public.myproject where id = " + id
   );
 
   res.render("edit-my-project", {
@@ -258,14 +258,14 @@ async function editMyProjectForm(req, res) {
     const months = Math.floor(time / (1000 * 60 * 60 * 24 * 30));
     const years = Math.floor(time / (1000 * 60 * 60 * 24) / 365);
 
-    let distance = [];
+    let duration = [];
 
     if (days < 24) {
-      distance += days + " Days";
+      duration += days + " Days";
     } else if (months < 12) {
-      distance += months + " Month";
+      duration += months + " Month";
     } else if (years < 365) {
-      distance += years + " Years";
+      duration += years + " Years";
     }
 
     let image = "";
@@ -275,8 +275,8 @@ async function editMyProjectForm(req, res) {
       console.log(image);
     }
 
-    let updateImage = `UPDATE projects SET project_name='${projectName}', start_date='${startDate}', end_date='${endDate}', 
-        description='${description}',distance='${distance}',"updatedAt"=now(), technologies='{${techIcon}}' `;
+    let updateImage = `UPDATE public.myproject SET project_name='${projectName}', start_date='${startDate}', end_date='${endDate}', 
+        description='${description}',duration='${duration}',"updatedAt"=now(), technologies='{${techIcon}}' `;
 
     if (image !== "") {
       updateImage += `, image = '${image}'`;
@@ -295,7 +295,7 @@ async function editMyProjectForm(req, res) {
 async function handleDeleteProject(req, res) {
   const { id } = req.params;
   const data = await SequelizePool.query(
-    "DELETE FROM projects where id = " + id
+    "DELETE FROM public.myproject where id = " + id
   );
 
   res.redirect("/");

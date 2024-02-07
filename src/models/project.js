@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       end_date: DataTypes.DATEONLY,
       description: DataTypes.TEXT,
       technologies: DataTypes.ARRAY(DataTypes.STRING),
-      distance: DataTypes.STRING,
+      duration: DataTypes.STRING,
       image: DataTypes.STRING,
       author: DataTypes.INTEGER,
     },
