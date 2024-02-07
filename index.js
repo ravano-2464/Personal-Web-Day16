@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const flash = require("express-flash");
-const upload = require("./src/middleware/uploadFile");
+const upload = require("./src/middleware/uploadFile"); 
 const app = express();
 const port = 7000;
 
@@ -11,12 +11,23 @@ const { development } = require("./src/config/config.json");
 const { Sequelize, QueryTypes } = require("sequelize");
 const SequelizePool = new Sequelize(development);
 
+// const dbPool = require("./src/connection/database");
+
+// test db
+// dbPool.connect((err) => {
+//   if (err) {
+//     console.log(err.message);
+//   } else {
+//     console.log("Database Connected");
+//   }
+// });
+
 // use hbs for view engine
 app.set("view engine", "hbs");
 // menambahkan path
 app.set("views", "src/views");
 app.use("/assets", express.static("src/assets"));
-app.use("/uploads", express.static("src/uploads"));
+app.use("/uploads", express.static("src/uploads")); // tambahan
 app.use(express.urlencoded({ extended: false })); // body parser
 app.use(
   session({
@@ -36,8 +47,8 @@ app.use(flash());
 // routing
 app.get("/", home);
 app.get("/contact", contact);
-app.get("/my-project", myProject);
-app.post("/my-project", upload.single("image"), handleMyProject);
+app.get("/my-project", MyProject);
+app.post("/my-project", upload.single("image"), handleMyProject); // tambahan
 
 app.get("/my-testimonials", myTestimonials);
 app.get("/detail-project/:id", detailProject);
@@ -49,7 +60,7 @@ app.get("/logout", handleLogout);
 
 app.get("/delete/:id", handleDeleteProject);
 app.get("/edit-my-project/:id", editMyProject);
-app.post("/edit-my-project/:id", upload.single("image"), editMyProjectForm);
+app.post("/edit-my-project/:id", upload.single("image"), editMyProjectForm); 
 
 function register(req, res) {
   const titlePage = "Register";
@@ -64,10 +75,10 @@ async function handleRegister(req, res) {
   try {
     const { name, email, password } = req.body;
 
-    // console.log(password);
+    console.log(password);
     bcrypt.hash(password, 10, async function (err, hashPass) {
       await SequelizePool.query(
-        `INSERT INTO user (name, email, password, "createdAt", "updatedAt")
+        `INSERT INTO public.user (name, email, password, "createdAt", "updatedAt")
       VALUES ('${name}','${email}','${hashPass}' ,NOW(), NOW())`
       );
     });
@@ -95,8 +106,8 @@ async function handleLogin(req, res) {
       { type: QueryTypes.SELECT }
     );
 
-    if (checkEmail.length === 0) {
-      req.flash("failed", "Email is not register!");
+    if (!checkEmail.length) {
+      req.flash("failed", "Your Email Is Not Register!!!");
       return res.redirect("/login");
     }
 
@@ -106,8 +117,7 @@ async function handleLogin(req, res) {
       } else {
         req.session.handleLogin = true;
         req.session.user = checkEmail[0].name;
-        req.session.idpublic.user = checkEmail[0].id;
-        req.flash("success", "Wellcome!");
+        req.flash("success", "👋🏻 Welcome!!! Now You Are Succesfully Logged To Your Account!");
         return res.redirect("/");
       }
     });
@@ -117,40 +127,20 @@ async function handleLogin(req, res) {
 }
 
 async function home(req, res) {
-  try {
-    let projectNew;
+  const projectNew = await SequelizePool.query("SELECT * FROM public.myproject");
+  const titlePage = "Home";
 
-    if (req.session.handleLogin) {
-      const author = req.session.idpublic.user;
-      projectNew = await SequelizePool.query(
-        `SELECT public.myproject.id, myproject.project_name, public.myproject.description, public.myproject.duration, public.myproject.image, public.myproject.author,
-        public.myproject."createdAt", public.myproject."updatedAt", public.myproject.technologies, public.user.name FROM public.myproject INNER JOIN public.user ON public.authors = user.id where author = ${author} ORDER BY public.myproject.id DESC`,
-        { type: QueryTypes.SELECT }
-      );
-    } else {
-      projectNew = await SequelizePool.query(
-        `SELECT public.myproject.id, public.myproject.project_name, public.myproject.description, public.myproject.duration, public.myproject.image, public.myproject.author,
-         public.myproject."createdAt", public.myproject."updatedAt", public.myproject.technologies, public.user.name FROM public.myproject INNER JOIN public.user ON public.myproject.author = public.user.id ORDER BY public.myproject.id DESC`,
-        { type: QueryTypes.SELECT }
-      );
-    }
+  const dataNew = projectNew[0].map((res) => ({
+    ...res,
+    handleLogin: req.session.handleLogin,
+  }));
 
-    const titlePage = "Home";
-
-    const dataNew = projectNew.map((res) => ({
-      ...res,
-      handleLogin: req.session.handleLogin,
-    }));
-
-    res.render("index", {
-      titlePage,
-      handleLogin: req.session.handleLogin,
-      user: req.session.user,
-      data: dataNew,
-    });
-  } catch (error) {
-    throw error;
-  }
+  res.render("index", {
+    titlePage,
+    handleLogin: req.session.handleLogin,
+    user: req.session.user,
+    data: dataNew,
+  });
 }
 
 function contact(req, res) {
@@ -162,7 +152,7 @@ function contact(req, res) {
   });
 }
 
-async function myProject(req, res) {
+async function MyProject(req, res) {
   const titlePage = "My Project";
 
   res.render("my-project", {
@@ -184,12 +174,12 @@ function myTestimonials(req, res) {
 async function detailProject(req, res) {
   const titlePage = "Detail Project";
   const { id } = req.params;
-  const dataDetail = await SequelizePool.query(
+  const data = await SequelizePool.query(
     "SELECT * FROM public.myproject where id = " + id
   );
 
   res.render("detail-project", {
-    data: dataDetail[0][0],
+    data: data[0][0],
     titlePage,
     handleLogin: req.session.handleLogin,
     user: req.session.user,
@@ -199,10 +189,6 @@ async function detailProject(req, res) {
 async function handleMyProject(req, res) {
   try {
     const { projectName, startDate, endDate, description, techIcon } = req.body;
-
-    const author = req.session.idpublic.user;
-
-    const image = req.file.filename;
 
     const dateOne = new Date(startDate);
     const dateTwo = new Date(endDate);
@@ -222,10 +208,9 @@ async function handleMyProject(req, res) {
     }
 
     await SequelizePool.query(
-      `INSERT INTO public.myproject(project_name, start_date, end_date, description, duration, image, author, "createdAt", "updatedAt", technologies) 
-      VALUES ('${projectName}','${startDate}','${endDate}','${description}','${duration}','${image}',${author}, NOW(), NOW(), '{${techIcon}}')`
+      `INSERT INTO public.myproject(project_name, start_date,end_date,description,technologies, "createdAt", "updatedAt",duration) 
+      VALUES ('${projectName}','${startDate}','${endDate}' ,'${description}','{${techIcon}}',NOW(), NOW(), '${duration}')`
     );
-
     res.redirect("/");
   } catch (error) {
     throw error;
@@ -268,24 +253,10 @@ async function editMyProjectForm(req, res) {
       duration += years + " Years";
     }
 
-    let image = "";
-
-    if (req.file) {
-      image = req.file.filename;
-      console.log(image);
-    }
-
-    let updateImage = `UPDATE public.myproject SET project_name='${projectName}', start_date='${startDate}', end_date='${endDate}', 
-        description='${description}',duration='${duration}',"updatedAt"=now(), technologies='{${techIcon}}' `;
-
-    if (image !== "") {
-      updateImage += `, image = '${image}'`;
-    }
-
-    updateImage += `where id = ${id}`;
-
-    await SequelizePool.query(updateImage);
-
+    await SequelizePool.query(
+      `UPDATE public.myproject SET project_name='${projectName}', start_date='${startDate}', end_date='${endDate}', 
+      description='${description}',"updatedAt"=now(), duration='${duration}', technologies='{${techIcon}}' where id = ${id}`
+    );
     res.redirect("/");
   } catch (error) {
     throw error;
@@ -308,5 +279,5 @@ function handleLogout(req, res) {
 }
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Server Berjalan Di Port ${port}`);
 });
