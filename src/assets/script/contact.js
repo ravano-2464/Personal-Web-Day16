@@ -26,6 +26,7 @@ function submitData(e) {
   console.log(message);
 
   let a = document.createElement("a");
+  console.log(`Name: ${name}\nEmail: ${email}\nPhone: ${phoneNumber}\nSubject: ${subject}\nMessage: ${message}`);
   a.href = `mailto:ravanoganteng123@gmail.com?subject=${subject}&body=${encodeURIComponent(
     `${message}, nama saya ${name}, kontak saya di ${email}`
   )}`;
