@@ -23,7 +23,7 @@ function submitData(e) {
   console.log(message);
 
   let a = document.createElement("a");
-  a.href = `mailto:${email}?subject=${subject}&body=${encodeURIComponent(
+  a.href = `mailto:ravanoganteng123@gmail.com?subject=${subject}&body=${encodeURIComponent(
     `${message}, nama saya ${name}, kontak saya di ${email}`
   )}`;
   a.click();
