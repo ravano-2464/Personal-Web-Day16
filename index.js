@@ -107,7 +107,7 @@ async function handleLogin(req, res) {
         req.session.handleLogin = true;
         req.session.user = checkEmail[0].name;
         req.session.idUsers = checkEmail[0].id;
-        req.flash("success", "Wellcome!");
+        req.flash("success", "👋🏻 Welcome!!! Now You Are Succesfully Logged To Your Account!");
         return res.redirect("/");
       }
     });
