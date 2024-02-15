@@ -211,19 +211,19 @@ async function handleMyProject(req, res) {
     const months = Math.floor(time / (1000 * 60 * 60 * 24 * 30));
     const years = Math.floor(time / (1000 * 60 * 60 * 24) / 365);
 
-    let distance = [];
+    let duration = [];
 
     if (days < 24) {
-      distance += days + " Days";
+      duration += days + " Days";
     } else if (months < 12) {
-      distance += months + " Month";
+      duration += months + " Month";
     } else if (years < 365) {
-      distance += years + " Years";
+      duration += years + " Years";
     }
 
     await SequelizePool.query(
-      `INSERT INTO public.myproject(project_name, start_date, end_date, description, distance, image, author, "createdAt", "updatedAt", technologies) 
-      VALUES ('${projectName}','${startDate}','${endDate}','${description}','${distance}','${image}',${author}, NOW(), NOW(), '{${techIcon}}')`
+      `INSERT INTO public.myproject(project_name, start_date, end_date, description, duration, image, author, "createdAt", "updatedAt", technologies) 
+      VALUES ('${projectName}','${startDate}','${endDate}','${description}','${duration}','${image}',${author}, NOW(), NOW(), '{${techIcon}}')`
     );
 
     res.redirect("/");
@@ -258,14 +258,14 @@ async function editMyProjectForm(req, res) {
     const months = Math.floor(time / (1000 * 60 * 60 * 24 * 30));
     const years = Math.floor(time / (1000 * 60 * 60 * 24) / 365);
 
-    let distance = [];
+    let duration = [];
 
     if (days < 24) {
-      distance += days + " Days";
+      duration += days + " Days";
     } else if (months < 12) {
-      distance += months + " Month";
+      duration += months + " Month";
     } else if (years < 365) {
-      distance += years + " Years";
+      duration += years + " Years";
     }
 
     let image = "";
@@ -276,7 +276,7 @@ async function editMyProjectForm(req, res) {
     }
 
     let updateImage = `UPDATE public.myproject SET project_name='${projectName}', start_date='${startDate}', end_date='${endDate}', 
-        description='${description}',distance='${distance}',"updatedAt"=now(), technologies='{${techIcon}}' `;
+        description='${description}',duration='${duration}',"updatedAt"=now(), technologies='{${techIcon}}' `;
 
     if (image !== "") {
       updateImage += `, image = '${image}'`;
