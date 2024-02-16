@@ -64,11 +64,20 @@ async function handleRegister(req, res) {
   try {
     const { name, email, password } = req.body;
 
-    // console.log(password);
+    const checkEmail = await SequelizePool.query(
+      `SELECT * FROM public.user WHERE email = '${email}'`,
+      { type: QueryTypes.SELECT }
+    );
+
+    if (checkEmail.length > 0) {
+      req.flash("failed", "❌ Email already registered. Please Use Or Crate A Different One!!!");
+      return res.redirect("/register");
+    }
+
     bcrypt.hash(password, 10, async function (err, hashPass) {
       await SequelizePool.query(
         `INSERT INTO public.user (name, email, password, "createdAt", "updatedAt")
-      VALUES ('${name}','${email}','${hashPass}' ,NOW(), NOW())`
+        VALUES ('${name}','${email}','${hashPass}' ,NOW(), NOW())`
       );
     });
 
