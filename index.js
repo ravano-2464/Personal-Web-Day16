@@ -96,7 +96,7 @@ async function handleLogin(req, res) {
     );
 
     if (checkEmail.length === 0) {
-      req.flash("failed", "Email is not register!");
+      req.flash("failed", "❌ You Must Register Your Email And Password At Register Form!!!");
       return res.redirect("/login");
     }
 
@@ -107,7 +107,7 @@ async function handleLogin(req, res) {
         req.session.handleLogin = true;
         req.session.user = checkEmail[0].name;
         req.session.idUsers = checkEmail[0].id;
-        req.flash("success", "👋🏻 Welcome!!! Now You Are Succesfully Logged To Your Account!");
+        req.flash("success", "✅👋🏻 Welcome!!! Now You Are Succesfully Logged To Your Account!!!");
         return res.redirect("/");
       }
     });
