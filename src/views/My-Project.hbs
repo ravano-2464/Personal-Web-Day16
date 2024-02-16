@@ -133,7 +133,7 @@
         <div class="container add-project-box">
           <h1 class="project-heading"><i class="fa fa-desktop"></i> ADD MY PROJECT</h1>
 
-          <form class="project-form" action="/my-project" method="POST">
+          <form class="project-form" action="/my-project" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
               <label for="exampleInputName" class="form-label fs-2 fw-medium">
                 <i class="fas fa-project-diagram"></i> Project Name</label>
@@ -266,6 +266,7 @@
                 class="form-control form-control-lg px-2"
                 type="file"
                 id="formFile"
+                name="image"
                 style="font-size: 2rem"
               />
             </div>
